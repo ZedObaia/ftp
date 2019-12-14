@@ -40,20 +40,27 @@ To run ftclient:
 	$ client/ftclient HOSTNAME PORTNO
 
 	Commands:
-		list
+		ls
 		get <filename>
-		quit
+		put <filename>
+		bye
+
 ```
 
 Available commands:
 ```
-list            - retrieve list of files in the current remote directory
+ls            - retrieve list of files in the current remote directory
 get <filename>  - get the specified file
-quit            - end the ftp session
+put <filename>  - send the specified file
+bye            - end the ftp session
 ```
 
 Logging In:
 ```
 	Name: anonymous
 	Password: [empty]
+
+	- Add users inside ./server/auth  (each line is a user's credentials) in the following format
+
+	username password
 ```

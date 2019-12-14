@@ -74,4 +74,6 @@ int ftserve_recv_cmd(int sock_control, char*cmd, char*arg);
 void ftserve_process(int sock_control);
 
 
+int ftserver_get(int data_sock, int sock_control, char* arg);
+
 #endif

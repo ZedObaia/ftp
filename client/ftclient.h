@@ -73,4 +73,7 @@ int ftclient_send_cmd(struct command *cmd);
 void ftclient_login();
 
 
+
+void ftserve_retr(int sock_control, int sock_data, char* filename);
+
 #endif

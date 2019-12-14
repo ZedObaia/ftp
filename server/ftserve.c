@@ -43,6 +43,24 @@ int main(int argc, char *argv[])
 }
 
 
+int ftserver_get(int data_sock, int sock_control, char* arg)
+{
+
+    char data[MAXSIZE];
+    int size;
+    FILE* fd = fopen(arg, "w");
+    
+    while ((size = recv(data_sock, data, MAXSIZE, 0)) > 0) {
+        fwrite(data, 1, size, fd);
+    }
+
+    if (size < 0) {
+        perror("error\n");
+    }
+
+    fclose(fd);
+    return 0;
+}
 
 /**
  * Send file specified in filename over data connection, sending
@@ -292,7 +310,7 @@ int ftserve_recv_cmd(int sock_control, char*cmd, char*arg)
 	if (strcmp(cmd, "QUIT")==0) {
 		rc = 221;
 	} else if((strcmp(cmd, "USER")==0) || (strcmp(cmd, "PASS")==0) ||
-			(strcmp(cmd, "LIST")==0) || (strcmp(cmd, "RETR")==0)) {
+			(strcmp(cmd, "LIST")==0) || (strcmp(cmd, "RETR")==0) || (strcmp(cmd, "SEND")==0))  {
 		rc = 200;
 	} else { //invalid command
 		rc = 502;
@@ -347,6 +365,9 @@ void ftserve_process(int sock_control)
 				ftserve_list(sock_data, sock_control);
 			} else if (strcmp(cmd, "RETR")==0) { // Do get <filename>
 				ftserve_retr(sock_control, sock_data, arg);
+			}
+			else if(strcmp(cmd, "SEND")==0){
+				ftserver_get(sock_data, sock_control, arg);
 			}
 		
 			// Close data connection

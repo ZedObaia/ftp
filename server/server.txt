@@ -1,0 +1,6 @@
+-rwxrwxr-x 1 zed zed 42736 Dec 14 16:53 ftserve
+-rw-r--r-- 1 zed zed  6504 Dec 13 23:16 ftserve.c
+-rw-r--r-- 1 zed zed  1368 Dec 13 23:16 ftserve.h
+-rw-rw-r-- 1 zed zed 46928 Dec 14 16:53 ftserve.o
+-rw-r--r-- 1 zed zed   288 Dec 13 23:16 makefile
+-rw-r--r-- 1 zed zed     0 Dec 14 17:10 tmp.txt

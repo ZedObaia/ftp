@@ -66,14 +66,17 @@ int ftclient_read_command(char* buf, int size, struct command *cstruct)
 	}
 
 	// buf = command
-	if (strcmp(buf, "list") == 0) {
+	if (strcmp(buf, "ls") == 0) {
 		strcpy(cstruct->code, "LIST");		
 	}
 	else if (strcmp(buf, "get") == 0) {
 		strcpy(cstruct->code, "RETR");		
 	}
-	else if (strcmp(buf, "quit") == 0) {
+	else if (strcmp(buf, "bye") == 0) {
 		strcpy(cstruct->code, "QUIT");		
+	}
+	else if (strcmp(buf, "put") == 0) {
+		strcpy(cstruct->code, "SEND");		
 	}
 	else {//invalid
 		return -1;
@@ -246,6 +249,41 @@ void ftclient_login()
 }
 
 
+void ftserve_retr(int sock_control, int sock_data, char* filename)
+{	
+	FILE* fd = NULL;
+	char data[MAXSIZE];
+	size_t num_read;							
+		
+	fd = fopen(filename, "r");
+	
+	if (!fd) {	
+		// send error code (550 Requested action not taken)
+		send_response(sock_control, 550);
+		
+	} else {	
+		// send okay (150 File status okay)
+		send_response(sock_control, 150);
+	
+		do {
+			num_read = fread(data, 1, MAXSIZE, fd);
+
+			if (num_read < 0) {
+				printf("error in fread()\n");
+			}
+
+			// send block
+			if (send(sock_data, data, num_read, 0) < 0)
+				perror("error sending file\n");
+
+		} while (num_read > 0);													
+			
+		// send message: 226: closing conn, file transfer successful
+		send_response(sock_control, 226);
+
+		fclose(fd);
+	}
+}
 
 
 
@@ -337,7 +375,7 @@ int main(int argc, char* argv[])
 			// execute command
 			if (strcmp(cmd.code, "LIST") == 0) {
 				ftclient_list(data_sock, sock_control);
-			} 
+			}
 			else if (strcmp(cmd.code, "RETR") == 0) {
 				// wait for reply (is file valid)
 				if (read_reply() == 550) {
@@ -347,6 +385,13 @@ int main(int argc, char* argv[])
 				}
 				ftclient_get(data_sock, sock_control, cmd.arg);
 				print_reply(read_reply()); 
+			}
+			else if(strcmp(cmd.code, "SEND") == 0){
+				printf("Put code goes here\n");
+				// Open data connection with client
+
+				ftserve_retr(sock_control, data_sock, cmd.arg);
+				printf("filesent \n");
 			}
 			close(data_sock);
 		}

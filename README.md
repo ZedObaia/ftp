@@ -60,7 +60,7 @@ Logging In:
 	Name: anonymous
 	Password: [empty]
 
-	- Add users inside ./server/auth  (each line is a user's credentials) in the following format
+	- Add users inside ./server/.auth  (each line is a user's credentials) in the following format
 
 	username password
 ```

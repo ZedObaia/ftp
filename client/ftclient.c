@@ -346,7 +346,6 @@ int main(int argc, char* argv[])
 			printf("Invalid command\n");
 			continue;	// loop back for another command
 		}
-
 		// Send command to server
 		if (send(sock_control, buffer, (int)strlen(buffer), 0) < 0 ) {
 			close(sock_control);
@@ -387,11 +386,10 @@ int main(int argc, char* argv[])
 				print_reply(read_reply()); 
 			}
 			else if(strcmp(cmd.code, "SEND") == 0){
-				printf("Put code goes here\n");
 				// Open data connection with client
-
 				ftserve_retr(sock_control, data_sock, cmd.arg);
-				printf("filesent \n");
+				close(data_sock);
+
 			}
 			close(data_sock);
 		}

@@ -17,4 +17,5 @@ $(OBJS) : %.o: %.c
 clean:
 	@rm -f *.o ftserve
 	@rm -f ../common/*.o
+	@rm -f client.txt
 	@echo Done cleaning
